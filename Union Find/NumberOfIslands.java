@@ -136,11 +136,14 @@ class UnionFind {
     
     public UnionFind (int size, int count) {
         father = new int[size + 1];
+        for (int i = 1; i <= size; i++) {
+            father[i] = i;
+        }
         this.count = count;
     } 
     
     public int find (int a) {
-        if (0 == father[a]) {
+        if (a == father[a]) {
             return a;
         }
         father[a] = find(father[a]);
