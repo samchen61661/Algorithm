@@ -1,7 +1,7 @@
 public class Solution {
     public int findKthLargest(int[] nums, int k) {
         int len = nums.length;
-        if (len < 1 || k < 1) {
+        if (len < 1 || k < 1 || k > len) {
             return 0;
         }
         /*
