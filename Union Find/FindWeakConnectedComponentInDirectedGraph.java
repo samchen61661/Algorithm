@@ -21,9 +21,6 @@ public class Solution {
         
         for (DirectedGraphNode node : nodes) {
             set.add(node.label);
-            for (DirectedGraphNode neighbor : node.neighbors) {
-                set.add(neighbor.label);
-            }
         }
         
         UnionFind unionfind = new UnionFind(set);
@@ -76,11 +73,11 @@ class UnionFind {
         }
         
         int root = fatherNode;
-        fatherNode = label;
         
-        while (fatherNode != father.get(fatherNode)) {
-            father.put(fatherNode, root);
-            fatherNode = father.get(fatherNode);
+        while (label != father.get(label)) {
+            int tmp = father.get(label);
+            father.put(label, root);
+            label = tmp;
         }
         
         return root;
