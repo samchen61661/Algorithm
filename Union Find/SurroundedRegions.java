@@ -4,8 +4,6 @@ public class Solution {
      * @return void
      */
     public void surroundedRegions(char[][] board) {
-        // It is better to use BFS.
-        // Time complexity: O(N)    Space complexity: O(N)
         if (board == null || board.length == 0 || board[0].length == 0) {
             return;
         }
@@ -13,9 +11,13 @@ public class Solution {
         int row = board.length;
         int col = board[0].length;
         
-        Queue<Node> queue = new LinkedList<>();
         final int[] deltaX = {-1, 0, 1, 0};
         final int[] deltaY = {0, 1, 0, -1};
+        
+        /*
+        // BFS.
+        // Time complexity: O(N)    Space complexity: O(N)
+        Queue<Node> queue = new LinkedList<>();
         
         for (int i = 0; i < row; i++) {
             if (board[i][0] == 'O') {
@@ -60,6 +62,79 @@ public class Solution {
                     board[i][j] = 'O';
                 }
             }
+        }
+        */
+        
+        // Union Find
+        UnionFind uf = new UnionFind(row * col);
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                for (int k = 0; k < 4; k++) {
+                    int new_x = i + deltaX[k];
+                    int new_y = j + deltaY[k];
+                    if (new_x >= 0 && new_y >= 0 && new_x < row && new_y < col) {
+                        if (board[i][j] == board[new_x][new_y]) {
+                            uf.union(i * col + j, new_x * col + new_y);
+                        }
+                    }
+                }
+            }
+        }
+        
+        HashSet<Integer> rootSet = new HashSet<>();
+        
+        for (int i = 0; i < row; i++) {
+            if (board[i][0] == 'O') {
+                rootSet.add(uf.find(i * col));
+            }
+            if (board[i][col - 1] == 'O') {
+                rootSet.add(uf.find(i * col + col - 1));
+            }
+        }
+        
+        for (int i = 0; i < col; i++) {
+            if (board[0][i] == 'O') {
+                rootSet.add(uf.find(i));
+            }
+            if (board[row - 1][i] == 'O') {
+                rootSet.add(uf.find((row - 1) * col + i));
+            }
+        }
+        
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (board[i][j] == 'O' && !rootSet.contains(uf.find(i * col + j))) {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+}
+
+class UnionFind {
+    private int[] father;
+    
+    public UnionFind (int n) {
+        father = new int[n + 1];
+        for (int i = 1; i < n + 1; i++) {
+            father[i] = i;
+        }
+    }
+    
+    public int find (int a) {
+        if (a == father[a]) {
+            return a;
+        }
+        father[a] = find(father[a]);
+        return father[a];
+    }
+    
+    public void union (int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            father[rootA] = rootB;
         }
     }
 }
