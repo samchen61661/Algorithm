@@ -4,6 +4,10 @@ public class Solution {
      * @param words: A list of string
      * @return: A list of string
      */
+     
+    private int[] deltaX = {1, 0, -1, 0};
+    private int[] deltaY = {0, 1, 0, -1};
+    
     public ArrayList<String> wordSearchII(char[][] board, ArrayList<String> words) {
         ArrayList<String> res = new ArrayList<>();
         if (board == null || words == null || words.size() == 0) {
@@ -24,36 +28,37 @@ public class Solution {
             trie.insert(word);
         }
         
+        boolean[][] isVisited = new boolean[row][col];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                dfs(res, board, i, j, trie, new StringBuilder(), set);
+                dfs(res, board, i, j, trie, new StringBuilder(), set, isVisited);
             }
         }
         
         return res;
     }
     
-    private void dfs (ArrayList<String> res, char[][] board, int i, int j, Trie trie, StringBuilder builder, HashSet<String> set) {
+    private void dfs (List<String> res, char[][] board, int i, int j, Trie trie, StringBuilder builder, HashSet<String> set, boolean[][] isVisited) {
         int row = board.length;
         int col = board[0].length;
         
-        if (i >= 0 && j >= 0 && i < row && j < col && board[i][j] != '0') {
+        if (i >= 0 && j >= 0 && i < row && j < col && !isVisited[i][j]) {
             builder.append(board[i][j]);
-            char c = board[i][j];
-            board[i][j] = '0';
+            isVisited[i][j] = true;
             
             if (trie.startsWith(builder.toString())) {
                 if (trie.search(builder.toString()) && set.add(builder.toString())) {
                     res.add(builder.toString());
                 }
-                dfs(res, board, i + 1, j, trie, builder, set);
-                dfs(res, board, i - 1, j, trie, builder, set);
-                dfs(res, board, i, j + 1, trie, builder, set);
-                dfs(res, board, i, j - 1, trie, builder, set);
                 
+                for (int k = 0; k < 4; k++) {
+                    int new_x = i + deltaX[k];
+                    int new_y = j + deltaY[k];
+                    dfs(res, board, new_x, new_y, trie, builder, set, isVisited);    
+                }
             }
     
-            board[i][j] = c;
+            isVisited[i][j] = false;
             builder.setLength(builder.length() - 1);
         }
     }
