@@ -38,7 +38,7 @@ public class Solution {
         int[] indexes = new int[len];
         int[] vals = new int[len];
         
-         memo[1] = 1;
+        memo[1] = 1;
         for (int i = 0; i < len; i++) {
             vals[i] = arr[i];
             indexes[i] = 1;
@@ -46,13 +46,9 @@ public class Solution {
         
         for (int i = 2; i <= n; i++) {
             int min = Integer.MAX_VALUE;
-            int index = -1;
-            // Get min val and its index
-            for (int j = 0; j < len; j++) {
-                if (min > vals[j]) {
-                    min = vals[j]; 
-                    index = j;
-                }
+            // Get min val
+            for (int val : vals) {
+                min = Math.min(min, val);
             }
             
             memo[i] = min;
