@@ -21,13 +21,13 @@ public class Solution {
 	        while (left <= right && nums[left] < k) {
 	            left++;
 	        }
-	        //System.out.println(left + " " + right);
+	        
 	        if (left <= right) {
 	            swap(nums, left, right);
 	            left++;
 	            right--;
 	        }
-	        //System.out.println(left + " " + right);
+	        
 	    }
 	    
 	    return left;
