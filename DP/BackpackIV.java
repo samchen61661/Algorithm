@@ -41,15 +41,12 @@ public class Solution {
         for (int i = 1; i <= len; i++) {
             for (int j = 0; j <= target; j++) {
                 int k = 0;
+                memo[i % 2][j] = 0;
                 
                 while (k * nums[i - 1] <= j) {
                     memo[i % 2][j] += memo[(i - 1) % 2][j - k * nums[i - 1]];
                     k++;
                 }
-            }
-            
-            for (int j = 0; j < target + 1; j++) {
-                memo[(i - 1) % 2][j] = 0;
             }
         }
         
