@@ -25,11 +25,10 @@ class Solution {
             }
         }
         
-        // x should be less than or equal to left * left
-        if (x / left >= left) {
-            return left;
+        if (x / right >= right) {
+            return right;
         }
         
-        return right;
+        return left;
     }
 }
